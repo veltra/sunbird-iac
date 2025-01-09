@@ -1,0 +1,1 @@
+output "workspace" { value = local.env }

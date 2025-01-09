@@ -1,0 +1,23 @@
+Installation
+~ terraform -install-autocomplete
+Environment
+dev: The dev environment of sunbird-pricing
+prod: The prod environment of sunbird-pricing
+Onboard
+# Setup environment file for AWS DEV
+~ ./helper.sh start dev --yes
+
+# For more info, please check
+~ ./helper.sh help
+Deployment
+# preview the changes:
+# ./helper.sh tf {env} plan
+
+# apply the changes with manual confirmation (recommended for prod env)
+# ./helper.sh tf {env} apply
+
+# example:
+~ ./helper.sh tf dev plan
+~ ./helper.sh tf dev apply
+
+Environment should be added in secrets.tf
