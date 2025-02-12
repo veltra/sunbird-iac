@@ -6,7 +6,7 @@ locals {
   _conf_ecs_api_cpu = {
     dev   = "256"
     stage = "256"
-    prod  = "256"
+    prod  = "1024"
   }
 
   ecs_api_cpu = local._conf_ecs_api_cpu[local.env]
@@ -14,7 +14,7 @@ locals {
   _conf_ecs_api_memory = {
     dev   = "512"
     stage = "512"
-    prod  = "512"
+    prod  = "2048"
   }
 
   ecs_api_memory = local._conf_ecs_api_memory[local.env]
@@ -36,7 +36,7 @@ locals {
   ecs_api_task_role_arn = local._conf_ecs_api_task_role_arn[local.env]
 
   _conf_ecs_api_erc_image = {
-    dev   = "859648348429.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-cs-data:latest"
+    dev   = "859648348429.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-cs-data-dev:latest"
     stage = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-cs-data-stage:latest"
     prod  = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-cs-data-prod:latest"
   }
@@ -70,7 +70,7 @@ locals {
   _conf_ecs_api_desired_count = {
     dev   = 1
     stage = 1
-    prod  = 1
+    prod  = 2
   }
 
   ecs_api_desired_count = local._conf_ecs_api_desired_count[local.env]
@@ -136,7 +136,7 @@ locals {
   ecs_ui_task_role_arn = local._conf_ecs_ui_task_role_arn[local.env]
 
   _conf_ecs_ui_erc_image = {
-    dev   = "859648348429.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-pricing:latest"
+    dev   = "859648348429.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-pricing-dev:latest"
     stage = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-pricing-stage:latest"
     prod  = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-pricing-prod:latest"
   }
@@ -291,37 +291,44 @@ _conf_redis_allow_cidr_blocks = {
   redis_subnet_group_name = local._cong_redis_subnet_group_name[local.env]
 
   API_HOST = {
-    dev = "https://price-api.dev.veltra.com"
-    prod  = "https://price-api.veltra.com"
+    dev = "https://api.dev.veltra.com"
+    stage = "https://api.stage.veltra.com"
+    prod  = "https://api.veltra.com"
     }
 
   REDIS_ADDR = {
     dev = "sunbird-pricing-redis-dev.sg2vrl.0001.apne1.cache.amazonaws.com:6379"
+    stage = "sunbird-pricing-redis-stage.jzjydt.0001.apne1.cache.amazonaws.com:6379"
     prod  = "sunbird-pricing-redis-prod.jzjydt.0001.apne1.cache.amazonaws.com:6379"  
     }
 
   DB_HOST = {
     dev = "veltra-dev.cluster-ro-cqzknuwlvckx.ap-northeast-1.rds.amazonaws.com"
+    stage = "veltra-stage.cluster-ro-cednzg2bccsp.ap-northeast-1.rds.amazonaws.com"
     prod  = "n-veltra-cluster.cluster-ro-cednzg2bccsp.ap-northeast-1.rds.amazonaws.com"  
     }
     
   CS_DATA = {
-    dev = "https://price-api.dev.veltra.com"
-    prod  = "https://price-api.veltra.com/query"  
+    dev = "https://api.dev.veltra.com/price/v1/query"
+    stage = "https://api.stage.veltra.com/price/v1/query"
+    prod  = "https://api.veltra.com/price/v1/query"
     }
 
   DB_USER = {
     dev = "veltra"
+    stage = "veltrauser"
     prod  = "veltrauser"
     }
 
   DB_PASSWORD = {
     dev = "veltra123"
+    stage = "W95zCa2v"
     prod  = "ghFKEm5z"
     }
     
   CS_DATA_GRAPHQL_ENDPOINT = {
-    dev = "https://price-api.dev.veltra.com/query"
-    prod  = "https://price-api.veltra.com/query"
+    dev = "https://api.dev.veltra.com/price/v1/query"
+    stage = "https://api.stage.veltra.com/price/v1/query"
+    prod  = "https://graphql.api.prod.veltra.com/price/v1/query"
     }
 }

@@ -53,6 +53,10 @@ environment = [
   {
     name      = "API_HOST"
     value = local.API_HOST[local.env]
+  },
+  {
+    name  = "API_VERSION_PATH",
+    value = "/price/v1"
   }
 ]
  }
@@ -138,7 +142,7 @@ resource "aws_lb_target_group" "sunbird-pricing_tg" {
   target_type = "ip"
 
   health_check {
-    path                = "/health"
+    path                = "/"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
@@ -148,15 +152,19 @@ resource "aws_lb_target_group" "sunbird-pricing_tg" {
   }
 }
 
-# add load balancer listener, forward traffic to sunbird-pricing target group
 resource "aws_lb_listener" "sunbird-pricing_alb_listener" {
   load_balancer_arn = aws_lb.sunbird-pricing_alb.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.sunbird-pricing_tg.arn
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 

@@ -7,10 +7,6 @@ DEFAULT_PROFILE="default"
 DEFAULT_ECS_SERVICE_PRIVATE="sunbird-cs-data"
 DEFAULT_ECS_SERVICE_PUBLIC="sunbird-pricing"
 
-# ALB
-DEFAULT_ALB_NAME="currentiste-alb"
-DEFAULT_ALB_PORT="443"
-
 # App Settings
 DEFAULT_APP_ENV="dev"
 DEFAULT_APP_DEBUG="true"
