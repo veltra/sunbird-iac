@@ -1,6 +1,6 @@
 # Task definition
-resource "aws_ecs_task_definition" "sunbird-admin-api_td" {
-  family                   = "sunbird-admin-api-td-${local.env}"
+resource "aws_ecs_task_definition" "sunbird-admin_td" {
+  family                   = "sunbird-admin-td-${local.env}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = local.ecs_api_cpu
@@ -10,8 +10,8 @@ resource "aws_ecs_task_definition" "sunbird-admin-api_td" {
 
   container_definitions = jsonencode([
     {
-      name                   = "sunbird-admin-api"
-      image                  = local.admin_api_erc_image
+      name                   = "sunbird-admin"
+      image                  = local.admin_erc_image
       enable_execute_command = true
       portMappings = [
         {
@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "sunbird-admin-api_td" {
         options = {
           awslogs-group         = local.ecs_api_log_group
           awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "sunbird-admin-api"
+          awslogs-stream-prefix = "sunbird-admin"
           awslogs-create-group  = "true"
         }
       }
@@ -36,20 +36,20 @@ resource "aws_ecs_task_definition" "sunbird-admin-api_td" {
           value = "${local.env}"
         },
         {
-          name  = "CS_DATA_GRAPHQL_ENDPOINT",
-          value = local.CS_DATA_GRAPHQL_ENDPOINT[local.env]
+          name  = "root",
+          value = "/usr/share/nginx/html"
         },
         {
-          name  = "API_HOST",
-          value = local.API_HOST[local.env]
+          name  = "index",
+          value = "index.html index.htm"
         },
         {
-          name  = "API_VERSION_PATH",
-          value = "/sb-admin/v1"
+          name  = "try_files",
+          value = "$uri /index.html"
         },
         {
-          name  = "FORWARD_APP_PORT",
-          value = "8080"
+          name  = "server_name",
+          value = "localhost"
         }
       ],
       mountPoints = [],
@@ -58,9 +58,9 @@ resource "aws_ecs_task_definition" "sunbird-admin-api_td" {
   ])
 }
 
-# Create target group for sunbird admin-api
-resource "aws_lb_target_group" "sunbird-admin-api_tg" {
-  name        = "sunbird-admin-api-tg-${local.env}"
+# Create target group for sunbird admin
+resource "aws_lb_target_group" "sunbird-admin_tg" {
+  name        = "sunbird-admin-tg-${local.env}"
   port        = 8080
   protocol    = "HTTP"
   vpc_id      = local.ecs_vpc_id
@@ -77,8 +77,8 @@ resource "aws_lb_target_group" "sunbird-admin-api_tg" {
   }
 }
 
-resource "aws_security_group" "sunbird-admin-api_svc_sg" {
-  name        = local.ecs_admin_api_sg_name
+resource "aws_security_group" "sunbird-admin_svc_sg" {
+  name        = local.ecs_sunbird_admin_sg_name
   description = local.ecs_admin_api_sg_desc
   vpc_id      = local.ecs_vpc_id
 
@@ -105,11 +105,11 @@ resource "aws_security_group" "sunbird-admin-api_svc_sg" {
   }
 }
 
-# Create sunbird-admin-api service
-resource "aws_ecs_service" "sunbird-admin-api_svc" {
-  name                   = "sunbird-admin-api-svc-${local.env}"
+# Create sunbird-admin service
+resource "aws_ecs_service" "sunbird-admin_svc" {
+  name                   = "sunbird-admin-svc-${local.env}"
   cluster                = aws_ecs_cluster.ecs_cluster.id
-  task_definition        = aws_ecs_task_definition.sunbird-admin-api_td.arn
+  task_definition        = aws_ecs_task_definition.sunbird-admin_td.arn
   launch_type            = "FARGATE"
   desired_count          = local.ecs_api_desired_count
   enable_execute_command = true
@@ -120,12 +120,12 @@ resource "aws_ecs_service" "sunbird-admin-api_svc" {
 
   network_configuration {
     subnets         = local.ecs_api_subnets
-    security_groups = [aws_security_group.sunbird-admin-api_svc_sg.id]
+    security_groups = [aws_security_group.sunbird-admin_svc_sg.id]
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.sunbird-admin-api_tg.arn
-    container_name   = "sunbird-admin-api"
+    target_group_arn = aws_lb_target_group.sunbird-admin_tg.arn
+    container_name   = "sunbird-admin"
     container_port   = 8080
   }
 }

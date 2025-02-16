@@ -43,6 +43,23 @@ locals {
 
   ecs_api_erc_image = local._conf_ecs_api_erc_image[local.env]
 
+    _conf_admin_api_erc_image = {
+    dev   = "859648348429.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-admin-api-dev:latest"
+    stage = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-admin-api-stage:latest"
+    prod  = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-admin-api-prod:latest"
+  }
+
+  admin_api_erc_image = local._conf_admin_api_erc_image[local.env]
+
+    _conf_admin_erc_image = {
+    dev   = "859648348429.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-admin-dev:latest"
+    stage = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-admin-stage:latest"
+    prod  = "021124174008.dkr.ecr.ap-northeast-1.amazonaws.com/sunbird-admin-prod:latest"
+  }
+
+  admin_erc_image = local._conf_admin_erc_image[local.env]
+
+
   _conf_ecs_api_log_group = {
     dev   = "/aws/ecs/sunbird-cs-data-task"
     stage = "/aws/ecs/sunbird-cs-data-task-stage"
@@ -59,6 +76,22 @@ locals {
 
   ecs_api_sg_name = local._conf_ecs_api_sg_name[local.env]
 
+  _conf_ecs_admin_api_sg_name = {
+    dev   = "sunbird-admin-api-svc-sg-dev"
+    stage = "sunbird-admin-api-svc-sg-stage"
+    prod  = "sunbird-admin-api-svc-sg-prod"
+  }
+
+  ecs_admin_api_sg_name = local._conf_ecs_admin_api_sg_name[local.env]
+
+  _conf_ecs_sunbird_admin_sg_name = {
+    dev   = "sunbird-admin-svc-sg-dev"
+    stage = "sunbird-admin-svc-sg-stage"
+    prod  = "sunbird-admin-svc-sg-prod"
+  }
+
+  ecs_sunbird_admin_sg_name = local._conf_ecs_sunbird_admin_sg_name[local.env]
+
   _conf_ecs_api_sg_desc = {
     dev   = "Security group for sunbird-pricing that only allows access from ALB"                // TODO: the desc is wrong, should change it manually from aws console then only update here.
     stage = "Security group for sunbird-cs-data that only allows access from sunbird-pricing service" // TODO
@@ -67,8 +100,24 @@ locals {
 
   ecs_api_sg_desc = local._conf_ecs_api_sg_desc[local.env]
 
+    _conf_ecs_admin_api_sg_desc = {
+    dev   = "Security group for sunbird-pricing that only allows access from ALB"                // TODO: the desc is wrong, should change it manually from aws console then only update here.
+    stage = "Security group for sunbird-cs-data that only allows access from sunbird-pricing service" // TODO
+    prod  = "Security group for sunbird-cs-data that only allows access from sunbird-pricing service" // TODO
+  }
+
+  ecs_admin_api_sg_desc = local._conf_ecs_admin_api_sg_desc[local.env]
+
+    _conf_ecs_sunbird_admin_sg_desc = {
+    dev   = "Security group for sunbird-admin that only allows access from ALB"                // TODO: the desc is wrong, should change it manually from aws console then only update here.
+    stage = "Security group for sunbird-admin that only allows access from sunbird-pricing service" // TODO
+    prod  = "Security group for sunbird-admin that only allows access from sunbird-pricing service" // TODO
+  }
+
+  ecs_sunbird_admin_sg_desc = local._conf_ecs_sunbird_admin_sg_desc[local.env]
+
   _conf_ecs_api_desired_count = {
-    dev   = 1
+    dev   = 3
     stage = 1
     prod  = 2
   }
@@ -185,7 +234,7 @@ locals {
   ecs_lb_subnets = local._conf_ecs_lb_subnets[local.env]
 
   _conf_ecs_ui_desired_count = {
-    dev   = 1
+    dev   = 2
     stage = 1
     prod  = 1
   }
@@ -330,5 +379,11 @@ _conf_redis_allow_cidr_blocks = {
     dev = "https://api.dev.veltra.com/price/v1/query"
     stage = "https://api.stage.veltra.com/price/v1/query"
     prod  = "https://graphql.api.prod.veltra.com/price/v1/query"
-    }
+    }  
+
+  # ADMIN_CS_DATA_GRAPHQL_ENDPOINT = {
+  #   dev = "https://api.dev.veltra.com/price/v1/query"
+  #   stage = "https://api.stage.veltra.com/price/v1/query"
+  #   prod  = "https://graphql.api.prod.veltra.com/price/v1/query"
+  #   }
 }
