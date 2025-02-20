@@ -73,7 +73,7 @@ locals {
     stage = "sunbird-cs-data-svc-sg-stage"
     prod  = "sunbird-cs-data-svc-sg-prod"
   }
-
+  
   ecs_api_sg_name = local._conf_ecs_api_sg_name[local.env]
 
   _conf_ecs_admin_api_sg_name = {
@@ -123,6 +123,15 @@ locals {
   }
 
   ecs_api_desired_count = local._conf_ecs_api_desired_count[local.env]
+
+    _conf_ecs_admin_desired_count = {
+    dev   = 1
+    stage = 1
+    prod  = 2
+  }
+
+  ecs_admin_desired_count = local._conf_ecs_admin_desired_count[local.env]
+
 
   _conf_ecs_api_subnets = {
     dev = [
@@ -376,9 +385,9 @@ _conf_redis_allow_cidr_blocks = {
     }
     
   CS_DATA_GRAPHQL_ENDPOINT = {
-    dev = "https://api.dev.veltra.com/price/v1/query"
-    stage = "https://api.stage.veltra.com/price/v1/query"
-    prod  = "https://graphql.api.prod.veltra.com/price/v1/query"
+    dev = "https://api.dev.veltra.com/cs-data/v1/query"
+    stage = "https://api.stage.veltra.com/cs-data/v1/query"
+    prod  = "https://graphql.api.prod.veltra.com/cs-data/v1/query"
     }  
 
   # ADMIN_CS_DATA_GRAPHQL_ENDPOINT = {

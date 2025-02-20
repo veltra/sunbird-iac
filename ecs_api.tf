@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "sunbird-cs-data-api_td" {
         },
         {
           name  = "API_VERSION_PATH",
-          value = "/price/v1"
+          value = "/cs-data/v1"
         }
       ],
       mountPoints = [],
@@ -117,6 +117,33 @@ resource "aws_security_group" "sunbird-cs-data-api_svc_sg" {
     protocol  = "tcp"
     # TODO, should only allow access from sunbird service, not from ALB
     security_groups = [aws_security_group.sunbird-pricing_alb_sg.id]
+  }
+  # Adding additional security groups
+  ingress {
+    from_port = 0
+    to_port   = 65535
+    protocol  = "tcp"
+    security_groups = [
+      "sg-05088c13ad7fca144"
+    ]
+  }
+
+  ingress {
+    from_port = 0
+    to_port   = 65535
+    protocol  = "tcp"
+    security_groups = [
+      "sg-0e340c5fef8fc8647"
+    ]
+  }
+
+  ingress {
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
+    security_groups = [
+      "sg-0c6f8b1dbdc022695"
+    ]
   }
 
   # Allow all outbound traffic
