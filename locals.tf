@@ -73,7 +73,7 @@ locals {
     stage = "sunbird-cs-data-svc-sg-stage"
     prod  = "sunbird-cs-data-svc-sg-prod"
   }
-
+  
   ecs_api_sg_name = local._conf_ecs_api_sg_name[local.env]
 
   _conf_ecs_admin_api_sg_name = {
