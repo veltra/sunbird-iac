@@ -111,7 +111,7 @@ resource "aws_ecs_service" "sunbird-admin_svc" {
   cluster                = aws_ecs_cluster.ecs_cluster.id
   task_definition        = aws_ecs_task_definition.sunbird-admin_td.arn
   launch_type            = "FARGATE"
-  desired_count          = local.ecs_api_desired_count
+  desired_count          = local.ecs_admin_desired_count
   enable_execute_command = true
 
   lifecycle {

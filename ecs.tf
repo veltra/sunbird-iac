@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "sunbird-pricing-${local.env}"
+  name = "sunbird-${local.env}"
 
   setting {
     name  = "containerInsights"
@@ -142,7 +142,7 @@ resource "aws_lb_target_group" "sunbird-pricing_tg" {
   target_type = "ip"
 
   health_check {
-    path                = "/health"
+    path                = "/"
     protocol            = "HTTP"
     matcher             = "200"
     interval            = 30
